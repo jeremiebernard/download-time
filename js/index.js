@@ -11,13 +11,29 @@ new Vue({
         this.result = null;
         return;
       }
-      let result = this.size * 1000;
-      result /= this.speed;
-      result /= 3600;
-      if (isNaN(result)) {
+      let hours = this.size * 1000;
+      hours /= this.speed;
+      hours /= 3600;
+      if (isNaN(hours)) {
+        this.result = null;
         return;
       }
-      this.result = result.toFixed(2);
+      const duration = moment.duration(hours, 'hours');
+      let result = 'in';
+      const days = Math.floor(duration.asDays());
+      if (days > 0) {
+        result += ' ' + days + ' ' + (1 < days ? 'days' : 'day');
+      }
+      hours = duration.hours();
+      if (hours > 0) {
+        result += ' ' + hours + ' ' + (1 < hours ? 'hours' : 'hour');
+      }
+      const minutes = duration.minutes();
+      if (minutes > 0) {
+        result += ' ' + minutes + ' ' + (1 < minutes ? 'minutes' : 'minute');
+      }
+      const seconds = duration.seconds();
+      this.result = result + ' ' + seconds + ' ' +  (1 < seconds ? 'seconds' : 'second');
     }
   }
 });
